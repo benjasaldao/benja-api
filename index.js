@@ -31,7 +31,9 @@ const options = {
     }
   },
 };
-app.use(cors(options));
+app.use(cors({
+  origin: allowedOrigin,
+}));
 
 routerApi(app);
 
