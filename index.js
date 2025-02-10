@@ -19,21 +19,12 @@ const port = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const allowedOrigin = config.allowedOrigin;
-console.log(allowedOrigin)
-const options = {
-  origin: (origin, callback) => {
-    if (origin == allowedOrigin) {
-      callback(null, true);
-    } else {
-      mailService.sendMail("Cors error", "api@gmail.com", `hubo un error de cors man, porque ${origin} es distinto de ${allowedOrigin}`)
-      callback(new Error("Acceso denegado"));
-    }
-  },
-};
-app.use(cors({
-  origin: allowedOrigin,
-}));
+app.use((req, res, next) => {
+  res.append('Access-Control-Allow-Origin', ['http://localhost:3000']);
+  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.append('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+})
 
 routerApi(app);
 
